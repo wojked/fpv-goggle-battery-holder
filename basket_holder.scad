@@ -16,17 +16,21 @@ HOLDER_WIDTH = 24;
 BASKED_WALL_THICKNESS = 3;
 BASKET_HEIGHT = 40;
 
-TOLERANCE = 0.5;
-SHELF_FULL_HEIGHT = 34;
+TOLERANCE = 0.05;
+SHELF_FULL_HEIGHT = 45;
 
 SHELF_BASE_THICKNESS = 4;
-SHELF_WALL_THICKNESS = 3;
+SHELF_WALL_THICKNESS = 4;
 SHELF_BATTERY_SPACE = 25;
 SHELF_FIN_HEIGHT = 4;
 SHELF_FULL_DEPTH = SHELF_BATTERY_SPACE + 2*SHELF_WALL_THICKNESS;
 
 CLIP_TOP_THICKNESS = 4;
-CLIP_LENGTH = 20;
+CLIP_LENGTH = 30;
+
+ZIP_TIE_WIDTH = 2.56;
+ZIP_TIE_THICKNESS = 1.12;
+ZIP_TIE_OFFSET = 10;
 
 //color("red")
 //translate([0,-9,8])
@@ -81,12 +85,20 @@ module clip() {
     }
 }
 
+module zip_tie() {
+        cube([STRIP_WIDTH, ZIP_TIE_THICKNESS, ZIP_TIE_WIDTH], true);      
+}
+
 module basket(){    
     clip_depth = HOLDER_THICKNESS + CLIP_WALL_THICKNESS;    
-    union(){        
-        translate([0,SHELF_FULL_DEPTH/2,0])        
-        shelf();
-        translate([0,-clip_depth/2,0])
-        clip();
-    }
+    difference(){
+        union(){        
+            translate([0,SHELF_FULL_DEPTH/2,0])        
+            shelf();
+            translate([0,-clip_depth/2,0])
+            clip();
+        }
+        translate([0,SHELF_WALL_THICKNESS/2,ZIP_TIE_OFFSET])        
+        zip_tie();
+    }   
 }
