@@ -6,7 +6,7 @@ CLIP_MIDDLE_WALL = 4;
 MIDDLE_FIN_HEIGHT = 20;
 
 STRIP_THICKNESS = 3.0; // 2.2 without velcro
-STRIP_WIDTH = 24;
+STRIP_WIDTH = 24; // 24
 
 
 HOLDER_OFFSET = 10;
@@ -21,19 +21,23 @@ SHELF_FULL_HEIGHT = 45;
 
 SHELF_BASE_THICKNESS = 4;
 SHELF_WALL_THICKNESS = 4;
-SHELF_BATTERY_SPACE = 25;
-SHELF_FIN_HEIGHT = 4;
+SHELF_BATTERY_SPACE = 24; // 25
+SHELF_FIN_HEIGHT = 5.5;
 SHELF_FULL_DEPTH = SHELF_BATTERY_SPACE + 2*SHELF_WALL_THICKNESS;
 
 CLIP_TOP_THICKNESS = 4;
-CLIP_LENGTH = 30;
+CLIP_LENGTH = 25;
+CLIP_ZIP_OFFSET = 6;
 
-ZIP_TIE_WIDTH = 2.56;
-ZIP_TIE_THICKNESS = 1.12;
-ZIP_TIE_OFFSET = 10;
+ZIP_TIE_WIDTH = 2.65;
+ZIP_TIE_THICKNESS = 1.40;
+ZIP_TIE_OFFSET = 12;
+ZIP_TIE_LENGTH = 100; // NOT THAT RELEVEANT
+
+EXTRA_SHELF_WIDTH = 6;
 
 //color("red")
-//translate([0,-9,8])
+//translate([0,-9,14])
 //rotate([0,180,180])
 //base();
 
@@ -77,7 +81,8 @@ module clip() {
     clip_depth = HOLDER_THICKNESS + CLIP_WALL_THICKNESS;
     difference(){
         cube([STRIP_WIDTH-TOLERANCE, clip_depth, SHELF_FULL_HEIGHT], true);  
-        translate([0,CLIP_WALL_THICKNESS+TOLERANCE,-CLIP_TOP_THICKNESS])
+        
+        translate([0,HOLDER_THICKNESS-TOLERANCE,-CLIP_TOP_THICKNESS])
         cube([STRIP_WIDTH, clip_depth, SHELF_FULL_HEIGHT], true);  
         
         translate([0,-TOLERANCE,-CLIP_LENGTH])        
@@ -86,19 +91,37 @@ module clip() {
 }
 
 module zip_tie() {
-        cube([STRIP_WIDTH, ZIP_TIE_THICKNESS, ZIP_TIE_WIDTH], true);      
+        cube([ZIP_TIE_LENGTH, ZIP_TIE_THICKNESS, ZIP_TIE_WIDTH], true);      
+}
+
+module extra_shelf() {
+    difference(){
+        cube([EXTRA_SHELF_WIDTH, SHELF_BATTERY_SPACE, SHELF_BASE_THICKNESS], true);
+        rotate([90,0,90])
+        zip_tie();    
+    }
 }
 
 module basket(){    
     clip_depth = HOLDER_THICKNESS + CLIP_WALL_THICKNESS;    
     difference(){
-        union(){        
+        union(){   
+            // Main shelf for the battery
             translate([0,SHELF_FULL_DEPTH/2,0])        
             shelf();
+            
+            // Extra shelf
+            translate([-(STRIP_WIDTH + EXTRA_SHELF_WIDTH)/2,SHELF_FULL_DEPTH/2,-(SHELF_FULL_HEIGHT-SHELF_BASE_THICKNESS)/2])
+            extra_shelf();            
+            
+            // Clip
             translate([0,-clip_depth/2,0])
             clip();
         }
         translate([0,SHELF_WALL_THICKNESS/2,ZIP_TIE_OFFSET])        
         zip_tie();
-    }   
+        
+        translate([0,-CLIP_WALL_THICKNESS - HOLDER_THICKNESS/2,CLIP_ZIP_OFFSET])
+        zip_tie();        
+    }          
 }
