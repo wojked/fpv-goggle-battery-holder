@@ -21,8 +21,8 @@ SHELF_FULL_HEIGHT = 45;
 
 SHELF_BASE_THICKNESS = 4;
 SHELF_WALL_THICKNESS = 4;
-SHELF_BATTERY_SPACE = 24; // 25
-SHELF_FIN_HEIGHT = 5.5;
+SHELF_BATTERY_SPACE = 21.50; // 25
+SHELF_FIN_HEIGHT = 9.5; //5.5
 SHELF_FULL_DEPTH = SHELF_BATTERY_SPACE + 2*SHELF_WALL_THICKNESS;
 
 CLIP_TOP_THICKNESS = 4;
@@ -34,13 +34,14 @@ ZIP_TIE_THICKNESS = 1.50;
 ZIP_TIE_OFFSET = 12;
 ZIP_TIE_LENGTH = 100; // NOT THAT RELEVEANT
 
-EXTRA_SHELF_WIDTH = 6;
+EXTRA_SHELF_WIDTH = 6; //6
 
 //color("red")
 //translate([0,-9,14])
 //rotate([0,180,180])
 //base();
 
+$fn = 32;
 basket();
 
 
@@ -65,7 +66,45 @@ module base(){
     }  
 }
 
-module shelf() {
+module openwork_matrix(){
+    openwork_x_ratio = 4;
+    openwork_y_ratio = 4;
+    circle_d = STRIP_WIDTH / (openwork_x_ratio + 4);
+    circle_distance = circle_d + 1;
+    circle_radius = circle_d / 2;    
+   
+    translate([-openwork_x_ratio*circle_distance/2, -openwork_y_ratio*circle_distance/2, -BASKET_HEIGHT/2])    
+    for(x = [ 0 : openwork_x_ratio ])
+    {
+        for(y = [ 0 : openwork_y_ratio ]){
+            translate([x*circle_distance, y*circle_distance, 0])
+            cylinder(10, circle_radius, circle_radius, true);
+        }
+    }      
+}
+
+module openwork_matrix_2(){
+    openwork_x_ratio = 4;
+    openwork_y_ratio = 6;
+    circle_d = STRIP_WIDTH / (openwork_x_ratio + 4);
+    circle_distance = circle_d + 1;
+    circle_radius = circle_d / 2;    
+ 
+    translate([0,6,-4])
+    rotate([-90,0,0])    
+    
+    translate([-openwork_x_ratio*circle_distance/2, -openwork_y_ratio*circle_distance/2, -BASKET_HEIGHT/2])    
+  
+    for(x = [ 0 : openwork_x_ratio ])
+    {
+        for(y = [ 0 : openwork_y_ratio ]){
+            translate([x*circle_distance, y*circle_distance, 0])
+            cylinder(10, circle_radius, circle_radius, true);
+        }
+    }      
+}
+
+module shelf() {    
     difference(){
         cube([STRIP_WIDTH-TOLERANCE, SHELF_FULL_DEPTH, SHELF_FULL_HEIGHT], true);  
         
@@ -74,7 +113,10 @@ module shelf() {
         
         translate([0,SHELF_BATTERY_SPACE/2,SHELF_BASE_THICKNESS+SHELF_FIN_HEIGHT])
         cube([STRIP_WIDTH, SHELF_BATTERY_SPACE, SHELF_FULL_HEIGHT], true);
-    }
+        
+        openwork_matrix();        
+        openwork_matrix_2();           
+    }       
 }
 
 module clip() {
