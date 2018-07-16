@@ -67,9 +67,9 @@ module base(){
 }
 
 module openwork_matrix(){
-    openwork_x_ratio = 4;
-    openwork_y_ratio = 4;
-    circle_d = STRIP_WIDTH / (openwork_x_ratio + 4);
+    openwork_x_ratio = 2;
+    openwork_y_ratio = 2;
+    circle_d = STRIP_WIDTH / (openwork_x_ratio + 2);
     circle_distance = circle_d + 1;
     circle_radius = circle_d / 2;    
    
@@ -84,9 +84,9 @@ module openwork_matrix(){
 }
 
 module openwork_matrix_2(){
-    openwork_x_ratio = 4;
-    openwork_y_ratio = 6;
-    circle_d = STRIP_WIDTH / (openwork_x_ratio + 4);
+    openwork_x_ratio = 2;
+    openwork_y_ratio = 3;
+    circle_d = STRIP_WIDTH / (openwork_x_ratio + 2);
     circle_distance = circle_d + 1;
     circle_radius = circle_d / 2;    
  
